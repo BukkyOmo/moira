@@ -23,33 +23,9 @@ Configure triggers at `localhost:8080` using your browser.
 
 Other installation methods are available, see [documentation](https://moira.readthedocs.io/en/latest/installation/index.html).
 
-## Development
+## Contribution
 
-To build and run tests you need local redis listening on port 6379.
-Easiest way to get redis is via docker:
-
-```bash
-docker run -p 6379:6379 -d redis:alpine
-```
-
-To run test use ``go test ./...`` or run [GoConvey](http://goconvey.co/):
-
-```bash
-go get github.com/smartystreets/goconvey
-goconvey
-```
-
-For full local deployment of all services, including web, graphite and metrics relay (may be slow on first launch) use:
-
-```bash
-docker-compose up
-```
-
-Before push your changes don't forget about linter:
-
-```bash
-make lint
-```
+Check our [contribution guideline](.github/CONTRIBUTING.md)
 
 ## Getting Started
 
