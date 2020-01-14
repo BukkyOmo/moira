@@ -21,16 +21,16 @@ judgment, and feel free to propose changes to this document in a pull request.
 
 ### Submitting an Issue
 
-If you find bugs or you want propose an idea that you think will be suitable for moira you can create an issue. The main 
+If you find bugs or you want propose an idea that you think will be suitable for Moira you can create an issue. The main 
 issue tracker is https://github.com/moira-alert/moira/issues. Issues that belongs for moira backend and web are placed here. 
 Issues that are related to python client and ansible role should be placed in issue tracker for related repo.
 
-We have a templates for two types of issues: Feature Request and a Bug. If you want to submit a bug please be patient 
+We have templates for two types of issues: a Feature Request and a Bug. If you want to submit a bug please be patient 
 and fill all required fields. This will help us to define the problem. 
 
-Try to follow this advices to fill a great issue:
+Try to follow this advice to fill a great issue:
 
-* Check that issue tracker do not contain issues similar to your.
+* Check that issue tracker does not contain issues similar to your.
 * Use a clear and descriptive title for the issue to identify the suggestion.
 * Provide a step-by-step description of the suggested enhancement in as many details as possible.
 * Provide specific examples to demonstrate the steps. Include copy/pasteable snippets which you use in those examples, as Markdown code blocks.
@@ -97,7 +97,7 @@ We are using following commit types in our repo:
 
 We are using [GolangCI-Lint](https://github.com/golangci/golangci-lint) to check our code for following the code style.
 Check your code with `make lint` before you will submit it. Code with broken style will not pass the CI and will not be
-reviewed. In future core contributors team can change the rules for linter in project.
+reviewed.
 
 ### Testing Strategy
 
@@ -128,7 +128,7 @@ For full local deployment of all services, including web, graphite and metrics r
 docker-compose up
 ```
 
-Before push your changes don't forget about linter:
+Before pushing your changes don't forget about linter:
 
 ```bash
 make lint
