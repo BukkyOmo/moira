@@ -6,6 +6,7 @@ import (
 	"math"
 	"strconv"
 	"strings"
+	"text/template"
 	"time"
 )
 
@@ -103,6 +104,18 @@ func (event *NotificationEvent) CreateMessage(location *time.Location) string {
 // NotificationEvents represents slice of NotificationEvent
 type NotificationEvents []NotificationEvent
 
+type TemplateEvent struct {
+	Metric         string
+	MetricElements []string
+	Timestamp      int64
+	Value          *float64
+	State          State
+}
+
+type TemplateTrigger struct {
+	Name string
+}
+
 // TriggerData represents trigger object
 type TriggerData struct {
 	ID         string   `json:"id"`
@@ -113,6 +126,17 @@ type TriggerData struct {
 	ErrorValue float64  `json:"error_value"`
 	IsRemote   bool     `json:"is_remote"`
 	Tags       []string `json:"__notifier_trigger_tags"`
+}
+
+func (trigger *TriggerData) TemplateDescription(data map[string]interface{}) {
+	buffer := new(bytes.Buffer)
+
+	triggerTemplate := template.Must(template.New("moira").Parse(trigger.Desc))
+	if err := triggerTemplate.Execute(buffer, data); err != nil {
+		return
+	}
+
+	trigger.Desc = buffer.String()
 }
 
 // GetTriggerURI gets frontUri and returns triggerUrl, returns empty string on selfcheck and test notifications

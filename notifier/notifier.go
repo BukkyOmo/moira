@@ -2,6 +2,7 @@ package notifier
 
 import (
 	"fmt"
+	"strings"
 	"sync"
 	"time"
 
@@ -160,6 +161,9 @@ func (notifier *StandardNotifier) runSender(sender moira.Sender, ch chan Notific
 				notifier.logger.Errorf(buildErr)
 			}
 		}
+
+		notifier.BuildTriggerDescription(pkg.Events, &pkg.Trigger)
+
 		err = sender.SendEvents(pkg.Events, pkg.Contact, pkg.Trigger, plot, pkg.Throttled)
 		if err == nil {
 			if metric, found := notifier.metrics.SendersOkMetrics.GetRegisteredMeter(pkg.Contact.Type); found {
@@ -169,4 +173,24 @@ func (notifier *StandardNotifier) runSender(sender moira.Sender, ch chan Notific
 			notifier.resend(&pkg, err.Error())
 		}
 	}
+}
+
+func (notifier *StandardNotifier) BuildTriggerDescription(events moira.NotificationEvents, trigger *moira.TriggerData) {
+	templateEvents := make([]moira.TemplateEvent, 0, len(events))
+	for _, event := range events {
+		templateEvent := moira.TemplateEvent{
+			Metric:         event.Metric,
+			MetricElements: strings.Split(event.Metric, "."),
+			Timestamp:      event.Timestamp,
+			State:          event.State,
+		}
+
+		if event.Value != nil {
+			templateEvent.Value = event.Value
+		}
+
+		templateEvents = append(templateEvents, templateEvent)
+	}
+
+	trigger.TemplateDescription(map[string]interface{}{"Events": templateEvents, "Trigger": moira.TemplateTrigger{Name: trigger.Name}})
 }

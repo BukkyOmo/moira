@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/moira-alert/moira"
+
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
 	"github.com/moira-alert/moira/metric_source/local"
@@ -79,11 +81,21 @@ func getTrigger(writer http.ResponseWriter, request *http.Request) {
 	if triggerID == "testlog" {
 		panic("Test for multi line logs")
 	}
+
 	trigger, err := controller.GetTrigger(database, triggerID)
 	if err != nil {
 		render.Render(writer, request, err)
 		return
 	}
+
+	if fmt.Sprint(request.Context().Value("edit")) == "true" {
+		triggerData := moira.TriggerData{Desc: *trigger.Desc}
+
+		triggerData.TemplateDescription(nil)
+
+		*trigger.Desc = triggerData.Desc
+	}
+
 	if err := render.Render(writer, request, trigger); err != nil {
 		render.Render(writer, request, api.ErrorRender(err))
 	}
